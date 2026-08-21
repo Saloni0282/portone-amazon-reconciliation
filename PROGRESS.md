@@ -30,9 +30,9 @@
 
 ### 6. Verification & Final Execution (Phase 6)
 - Compiled the Go program into `reconciler.exe`.
-- Generated `amazon_settlement_reconciliation_report.xlsx` with clean cell formulas.
+- Generated `amazon_reconciliation_before_fix.xlsx` (baseline variances) and `amazon_reconciliation_after_fix.xlsx` (perfectly balanced).
 - Wrote automated Go unit tests covering date parsing, normalizations, and rule matches.
-- Wrote accounting assertions validating zero variance, no database leakage, and matching totals.
+- Wrote accounting assertions validating zero variance, no database leakage, and many-to-many raw line aggregations.
 - Generated `db_dump.sql` containing full schema and data.
 
 ---
@@ -51,6 +51,18 @@ All Go unit tests and accounting assertions have **passed**. The final reconcili
     accounting_test.go:74: Reconciled: sales_other                    | Pay:     11.61 | Set:     11.61 | Diff: 0.00
     accounting_test.go:74: Reconciled: sales_product_charges          | Pay: 348815.93 | Set: 348815.93 | Diff: 0.00
     accounting_test.go:74: Reconciled: sales_shipping                 | Pay:   8294.16 | Set:   8294.16 | Diff: 0.00
---- PASS: TestAccountingAssertions (0.51s)
+--- PASS: TestAccountingAssertions (0.37s)
+=== RUN   TestManyToManyAggregation
+--- PASS: TestManyToManyAggregation (0.08s)
+=== RUN   TestNormalize
+--- PASS: TestNormalize (0.00s)
+=== RUN   TestParsePaymentsDate
+--- PASS: TestParsePaymentsDate (0.00s)
+=== RUN   TestParseSettlementsDate
+--- PASS: TestParseSettlementsDate (0.00s)
+=== RUN   TestMatchRulePayments
+--- PASS: TestMatchRulePayments (0.00s)
+=== RUN   TestMatchRuleSettlements
+--- PASS: TestMatchRuleSettlements (0.00s)
 PASS
 ```

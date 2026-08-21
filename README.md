@@ -83,7 +83,7 @@ Mapping is config-driven and resolved in Go based on the following priority list
 ### 4. Excel Structure & Auditability
 The generated reports are:
 - **`amazon_reconciliation_before_fix.xlsx`**: Generated using original config files showing mismatches.
-- **`amazon_reconciliation_after_fix.xlsx`**: Generated using corrected config files showing $0.00 variance.
+- **`amazon_reconciliation_after_fix.xlsx`**: Generated using the corrected database mapping configuration, showing $0.00 variance.
 - **`before_fix_mismatches.csv`**: Summary of mismatches prior to applying config fixes.
 - **`mismatch_investigation.md`**: Investigation details for each mapping defect.
 - **`Consolidated Data` Sheet**: Lists raw fields side-by-side alongside summary allocations and differences calculated via live cell formulas. Row display is grouped sequentially under each `record_ref` to preserve full granularity.
@@ -93,5 +93,14 @@ The generated reports are:
 ## Mapping Defect Log (`db/MAPPING_FIXES.sql`)
 The configurations provided contained several discrepancies which have been corrected entirely via database queries:
 - **Defects #1 & #2**: Removed low-value goods and tax allocations that double-routed orders to shipping.
-- **Defect #3**: Inserted a tax refund routing rule to `refunded_expenses`.
+- **Defect #3**: Updated the refund tax routing rule (previously had empty destination fields) to route to `refunded_expenses`.
 - **Defects #4, #5, #6, & #7**: Re-routed GST-inclusive Australia marketplace shipping taxes, giftwrap taxes, tax discounts, and withheld low-value goods taxes to `sales_product_charges` to align Settlements with Payments.
+
+---
+
+## Verification
+The pipeline is verified using a automated test harness:
+- **Zero Variance**: Accounting assertions verify a perfect $0.00 variance across all 9 summary categories.
+- **Leakage Prevention**: Checks verify that Payments columns derive exclusively from Payments source records, and Settlements columns from Settlements source records.
+- **Many-to-Many Aggregation**: Database-level tests verify correct summation of multi-row split splits under a shared `record_ref`.
+- **Auditable Granularity**: The sequential row grouping on the `Consolidated Data` sheet retains every raw file line number and amount, preserving full audit capability for finance users.

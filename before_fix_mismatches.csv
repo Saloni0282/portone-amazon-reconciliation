@@ -1,0 +1,5 @@
+summary_field,payments_amount,settlements_amount,variance
+sales_product_charges,348815.93,348779.62,36.31
+sales_shipping,8529.02,8529.02,0.00
+refunded_expenses,0.00,216.28,-216.28
+sales_other,11.61,11.97,-0.36

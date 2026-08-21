@@ -1,0 +1,11 @@
+# Ignore compiled binaries
+reconciler.exe
+*.exe
+*.bin
+*.out
+
+# Ignore local environment files
+.env
+.idea/
+.vscode/
+.gitignore

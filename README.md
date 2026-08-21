@@ -67,7 +67,7 @@ A Go-based reconciliation tool that ingests Amazon Payments CSV and Amazon Settl
 We ingest **all raw lines** from both files into `ingested_records` with an `idempotency_key` constraint to ensure complete source data auditability without duplicate records.
 
 ### 2. Reconciliation Eligibility
-Payments rows with status `Deferred` are marked as `excluded_deferred` during reconciliation because they represent future holds not yet settled in the current cash flow period. Only `Released` payments participate in active reconciliation.
+Payments rows with status `Deferred` are excluded from active reconciliation because they represent future holds not settled in the current cash-flow period.
 
 ### 3. Matching Precedence
 Mapping is config-driven and resolved in Go based on the following priority list:
@@ -102,5 +102,5 @@ The configurations provided contained several discrepancies which have been corr
 The pipeline is verified using a automated test harness:
 - **Zero Variance**: Accounting assertions verify a perfect $0.00 variance across all 9 summary categories.
 - **Leakage Prevention**: Checks verify that Payments columns derive exclusively from Payments source records, and Settlements columns from Settlements source records.
-- **Many-to-Many Aggregation**: Database-level tests verify correct summation of multi-row split splits under a shared `record_ref`.
+- **Many-to-Many Aggregation**: Database-level tests verify correct summation of multiple split rows under a shared `record_ref`.
 - **Auditable Granularity**: The sequential row grouping on the `Consolidated Data` sheet retains every raw file line number and amount, preserving full audit capability for finance users.
